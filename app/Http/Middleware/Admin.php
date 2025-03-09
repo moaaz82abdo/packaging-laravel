@@ -17,17 +17,18 @@ class Admin
      */
     public function handle(Request $request, Closure $next): Response
     {
-        if (Auth::check()) {
-            if (Auth::user()->user_type === 'USR') {
-                return $next($request);
-            }elseif (Auth::user()->user_type === 'ADM') {
-                return $next($request);
-            }else{
-                Session::flush();
-                return redirect()->route('login');
-            }
         
-        }
+            if (Auth::user()->user_type !== 'ADM') {
+                
+            
+            
+                Session::flash('error', 'You must be an admin to access this page.');
+                return response()->json("you must be logged in");
+            }
+
+        return $next($request);
+        
+        
     }
 }
 
